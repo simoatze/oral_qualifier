@@ -4,9 +4,9 @@ all: root.pdf
 
 root.pdf: root.tex $(DEPS)
 	pdflatex root.tex	
-	bibtex root
-	pdflatex root.tex
-	pdflatex root.tex
+	# bibtex root
+	# pdflatex root.tex
+	# pdflatex root.tex
 
 clean:
 	rm -f root.pdf *.ps *.dvi *~ \#*\#

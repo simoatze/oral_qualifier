@@ -1,0 +1,67 @@
+\documentclass[10pt, oneside]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{fullpage}
+% \usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{wrapfig}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{calc,shapes.multipart,chains,arrows}
+\usepackage{graphicx}
+\usepackage{nameref}
+\usepackage{xspace}
+\usepackage{adjustbox}
+\usepackage{framed}
+\usepackage[all]{xy}
+\usepackage{txfonts,pxfonts}
+\usepackage{bm}
+\usepackage{enumerate}
+\usepackage{algorithm}
+\usepackage{subfigure}
+\usepackage{algpseudocode}
+\usepackage[english,printdayoff]{isodate}
+\usepackage[pdftitle={PhD Proposal - Simone Atzeni}, pdfauthor={Simone
+  Atzeni}, pdfsubject={PhD Proposal}]{hyperref}
+
+\title{\textbf{PhD Written Qualifier Exam}}
+%
+\author{Simone Atzeni\\{\small simone@cs.utah.edu}}
+%
+\date{}
+
+\newcommand{\archer}{\textsc{Archer}\xspace}
+% \renewcommand*{\bibfont}{\footnotesize}
+
+\lstset{basicstyle=\ttfamily,
+escapeinside={||},
+mathescape=true}
+
+\newenvironment{blockquote}{\par\medskip\leftskip=4em\rightskip=2em\noindent\ignorespaces}{\par\medskip}
+
+\begin{document}
+\maketitle
+
+\input{introduction}
+\input{background}
+\input{proposed_research}
+\input{accomplished_work}
+\input{milestones}
+\input{timeline}
+\input{conclusions}
+
+\bibliographystyle{abbrv}
+\bibliography{references}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% eval: (flyspell-mode 1)
+%%% TeX-master: "root.tex"
+%%% End:
