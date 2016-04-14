@@ -1,4 +1,77 @@
 \section{Introduction}
+\label{sec:introduction}
+
+High performance computing (HPC) is undergoing an explosion in raw computing
+capabilities as evidenced by recent announcements of next-generation computing
+sys- tem projects [1]–[3]. To meet the stipulated performance and power
+budgets, many key software components in these projects are being transitioned
+to adopt on-node parallelism to a greater degree. The predominant pro-
+gramming model of choice in this transition is OpenMP— due in large part to
+its portability and ease of use. We are working with computational scientists
+at Lawrence Livermore National Laboratory (LLNL), one of the world’s largest
+computing facilities, where many of our mission- critical multiphysics
+applications [4] are being ported to exploit OpenMP.
+
+Multithreaded programming has become very popular with the multi-core
+revolution that spread in the last two decades.
+
+An increasing number of developers use multithreaded programming to
+build parallel software, but writing robust and correct applications
+that exploit a large number of cores is very difficult and error
+prone.
+
+The most common errors in multithreading programming are data races.
+A data race occurs when, in a concurrent program, two or more threads
+access a shared memory location, at least one thread is writing the
+location, and there is no explicit synchronization to coordinate the
+access of the threads.
+
+Data races are often hard to find with traditional debugging methods.
+
+
+OpenMP is central to portable shared memory parallel programming -
+yet, porting large HPC applications to OpenMP is error-prone.
+%
+Data races~\cite{sus_common_2008} are particularly egregious.
+%
+Conventional testing is ineffective for locating data races.
+%
+Undetected data races are especially problematic for large
+applications, leading to show-stopper bugs.
+
+Existing approaches to OpenMP data race detection rely on pure static
+or dynamic analysis techniques.
+%
+While effective on small- to medium-sized applications, pure
+approaches are unable to locate races in non-trivial HPC applications
+- especially those that involve hybrid concurrency.
+%
+While runtime approaches are known for their accuracy, even
+state-of-the-art techniques~\cite{flanagan_fasttrack:_2009,tsan} can
+incur a factor of 100 of slowdown and over 8 times memory overhead on
+large HPC applications.
+%
+% Dong: Please put some references for static techniques
+While static analysis based techniques incur little runtime overhead,
+they are imprecise and can produce false positives or miss errors.
+
+
+\begin{itemize}
+  \item Importance of runtime and memory overhead reduction in data race
+    detection
+  \item HPC --> very large program, often unfeasible to verify with
+    existing techniques
+    \begin{itemize}
+    \item runtime too long
+    \item large amount of memory required --> not able to finish the
+      runtime check
+    \end{itemize}
+  \item OpenMP
+  \item Data race detection: why is important
+  \item Real-cases: see HYDRA
+  \item Races and benign races
+  \item Goal of the dissertation: data race detector tool, low overhead, etc.
+\end{itemize}
 
 %%% Local Variables:
 %%% mode: latex
