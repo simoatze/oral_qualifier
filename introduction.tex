@@ -39,9 +39,32 @@ Data races are often hard to find with traditional debugging methods.
 Precise checking tools to detect these kinds of errors are needed now more
 than ever.
 %
-While data race is a well-known problem and many Pthread data race detection
+While data race is a well-known problem and many Pthreads data race detection
 tools have been proposed over the past twenty years, none or just a few of
 them are actually able to analyze OpenMP programs.
+%
+OpenMP programs are generally translated by the compiler into Pthreads
+programs,
+
+Data race detection research has been focused both on static and dynamic
+analysis techniques.
+%                                                 
+Static analysis techniques allow to reason about all the inputs of the program
+and the interleavings of the threads, and they are fairly scalable and fast
+since no runtime overhead is generated.
+%
+However, the lack of information that exists only at runtime makes these
+techniques very imprecise, in fact they often miss races and report many false
+positives.
+%
+While runtime techniques are very precise, in general they do not
+report any false positives and reports the races in the branches of the
+programs that are actually executed if any.
+%
+On the other hand dynamic analysis for data race detection is known to
+generate a very high runtime and memory overhead due to the operations it
+needs to perform and the states it needs to maintain to report the races.
+
 
 \begin{itemize}
   \item Importance of runtime and memory overhead reduction in data race
