@@ -45,7 +45,7 @@ them are actually able to analyze OpenMP programs.
 
 Data race detection research has been focused both on static and dynamic
 analysis techniques.
-%                                                 
+%
 Static analysis techniques allow to reason about all the inputs of the program
 and the interleavings of the threads, and they are fairly scalable and fast
 since no runtime overhead is generated.
@@ -91,12 +91,28 @@ accuracy using a fairly small amount of runtime and memory resources.
   race detection tool for large OpenMP applications that combine static and
   dynamic analysis while maintaining a low runtime and memory overhead.}
 %
-First, we develop a
+First, we combine static and existing dynamic techniques to reduce the amount
+of code to analyze at runtime.
+%
+Second, we will develop a new runtime technique for data race detection that
+exploit the structured parallelism of OpenMP and reduce runtime and memory
+overhead.
+%
+Our contributions are listed as follow:
 
 \begin{itemize}
-\item
-\item 
-\item 
+\item We will design a static analysis to identify the code executed
+  sequentially in a OpenMP program.
+\item We will design a static analysis technique that identify race free code
+  in a OpenMP program to exclude it from the runtime analysis.
+\item We will combine the static analysis with the existing Clang/LLVM Tsan
+  data race detection tool and we will make Tsan capable of detect data races
+  in OpenMP programs.
+\item We will design a new runtime analysis technique that exploit the
+  structured parallelism of the OpenMP paradigm in order to reduce the runtime
+  and memory overhead.
+\item We will implement and embed the aforementioned techniques in the
+  Clang/LLVM compiler as part of a data race detection tool called Archer.
 \end{itemize}
 
 %%% Local Variables:
