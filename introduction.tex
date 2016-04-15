@@ -4,9 +4,9 @@
 Multithreaded programming has become very popular with the multi-core
 revolution that spread in the last two decades.
 %
-This has aroused, in the High Performance Computing (HPC) world, to adopt
+This has allowed, in the High Performance Computing (HPC) world, to adopt
 on-node parallelism to a greater degree in large software applications
-development in order to guarantee the future required performance and power
+development especially to guarantee the future required performance and power
 budgets.
 %
 In support of this argument, HPC is undergoing an explosion in
@@ -42,9 +42,6 @@ than ever.
 While data race is a well-known problem and many Pthreads data race detection
 tools have been proposed over the past twenty years, none or just a few of
 them are actually able to analyze OpenMP programs.
-%
-OpenMP programs are generally translated by the compiler into Pthreads
-programs,
 
 Data race detection research has been focused both on static and dynamic
 analysis techniques.
@@ -57,28 +54,49 @@ However, the lack of information that exists only at runtime makes these
 techniques very imprecise, in fact they often miss races and report many false
 positives.
 %
-While runtime techniques are very precise, in general they do not
-report any false positives and reports the races in the branches of the
-programs that are actually executed if any.
+While runtime techniques are very precise, they do not report any false
+positives and reports the races in the branches of the programs that are
+actually executed if any.
 %
 On the other hand dynamic analysis for data race detection is known to
 generate a very high runtime and memory overhead due to the operations it
-needs to perform and the states it needs to maintain to report the races.
+needs to perform and the states it needs to maintain during the execution.
 
+The runtime overhead for the best tools, such as ThreadSanitizer (Tsan) and
+Intel Inspector XE, can introduce between $5x-20x$ slowdown and the memory
+overhead can be between $2x-10x$ the memory used by the normal execution of
+the programs.
+%
+For very large programs, such as HPC applications, the runtime and memory
+overhead can be even bigger, experiments show that the slowdown can be $100x$
+and the memory consumption can be $50x$ larger.
+%
+The high runtime slowdown and memory usage make such tools useless from the
+point of view of the developers, whom probably would not be keen to wait a
+long time to check their programs or they may not even have enough machine
+resources to run the tools.
+%
+We definitely need better techniques, either static or dynamic, to detect data
+races in large structured parallel applications, that guarantee precision and
+accuracy using a fairly small amount of runtime and memory resources.
 
 \begin{itemize}
-  \item Importance of runtime and memory overhead reduction in data race
-    detection
-  \item HPC --> very large program, often unfeasible to verify with
-    existing techniques
-    \begin{itemize}
-    \item runtime too long
-    \item large amount of memory required --> not able to finish the
-      runtime check
-    \end{itemize}
   \item Real-cases: see HYDRA
   \item Races and benign races
+  \item sequential blacklisting, data dependency analysis, etc.
   \item Goal of the dissertation: data race detector tool, low overhead, etc.
+\end{itemize}
+
+\emph{The goal of this dissertation is to provide a sound and precise data
+  race detection tool for large OpenMP applications that combine static and
+  dynamic analysis while maintaining a low runtime and memory overhead.}
+%
+First, we develop a
+
+\begin{itemize}
+\item
+\item 
+\item 
 \end{itemize}
 
 %%% Local Variables:
