@@ -85,6 +85,27 @@ accuracy using a fairly small amount of runtime and memory resources.
   \item Races and benign races
   \item sequential blacklisting, data dependency analysis, etc.
   \item Goal of the dissertation: data race detector tool, low overhead, etc.
+  \item Data races~\cite{sus_common_2008} are particularly egregious.
+    % 
+    Conventional testing is ineffective for locating data races.
+    % 
+    Undetected data races are especially problematic for large applications,
+    leading to show-stopper bugs.
+    % 
+    Existing approaches to OpenMP data race detection rely on pure static or
+    dynamic analysis techniques.
+    % 
+    While effective on small- to medium-sized applications, pure approaches
+    are unable to locate races in non-trivial HPC applications - especially
+    those that involve hybrid concurrency.
+    % 
+    While runtime approaches are known for their accuracy, even
+    state-of-the-art techniques~\cite{flanagan_fasttrack:_2009,tsan} can incur
+    a factor of 100 of slowdown and over 8 times memory overhead on large HPC
+    applications.
+    % 
+    While static analysis based techniques incur little runtime overhead, they
+    are imprecise and can produce false positives or miss errors.
 \end{itemize}
 
 \emph{The goal of this dissertation is to provide a sound and precise data
