@@ -1,0 +1,49 @@
+* Proposal Outline
+
+- Thesis: Reducing runtime and memory overhead of data race detection
+  in structured parallelism is novel, feasible and useful.
+
+- Introduction
+  - Importance of runtime and memory overhead reduction in data race
+    detection
+  - HPC --> very large program, often unfeasible to verify with
+    existing techniques
+    - runtime too long
+    - large amount of memory required --> not able to finish the
+      runtime check
+- Theory and Background
+  - State of the art in data race detection
+    - Happens-before
+    - Hybrid techniques
+- Proposed Research and Experimentation
+  - Combining static and dynamic analysis
+  - New algorithm for data race detection for structured parallelism
+    (OpenMP)
+- Accomplished Work
+  - Implementation of static technique to reduce amount of code to
+    analyze at runtime
+    - Data dependency analysis
+    - Sequential blacklisting
+    - LLVM tool work in progress
+    - Current results
+- Milestones
+  - ???
+- Timeline
+  - November 2014 - Poster accepted at ACM Student Competition at
+    SC'14. Combining static and dynamic analysis to reduce runtime and
+    memory overhead on data race detection techniques.
+  - November 2014 - LLVM Workshop at SC'14 - J. Protze, S. Atzeni,
+    D. H. Ahn, M. Schulz, G. Gopalakrishnan, M. S. Müller, I. Laguna,
+    Z. Rakamarić, and G. L. Lee, “Towards providing low-overhead data
+    race detection for large openmp applications,” in Proceedings of
+    the 2014 llvm compiler infrastructure in hpc, Piscataway, NJ, USA,
+    2014, pp. 40-47.
+  - May 2016 - Technical Paper accepted at IPDPS'16. ARCHER:
+    Effectively Spotting Data Races in Large OpenMP Applications
+  - May 2016 - Submit paper to IWOMP 2016 - 12th International
+    Workshop on OpenMP
+  - November 2016 - Submit paper to PLDI about new data race detection
+    algorithm
+  - May 2017 - Submit PhD dissertation
+- Conclusions
+- References
