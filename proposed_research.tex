@@ -1,6 +1,20 @@
 \section{Proposed Research}
 \label{sec:proposedresearch}
 
+At the best of our knowledge there are not, out there, OpenMP data race
+detectors that guarantee low runtime and memory overhead while maintaining
+high precision and accuracy.
+%
+This is already enough to motivate the need for better data race detection
+techniques and tools for structured parallel programming paradigms.
+%
+As claimed in \S~\ref{sec:introduction}, we propose several different
+contributions to obtain a better data race detection tool for OpenMP programs.
+%
+In the remainder of this section I will discuss and detail our proposed
+contributions and how the combination of them helps to obtain a better data
+race detector.
+
 We exploit OpenMP's structured parallelism to identify guaranteed sequential
 regions within OpenMP code.
 %
@@ -26,19 +40,6 @@ To motivate the need for better data race detection techniques for structured
 parallelism (i.e. OpenMP), rather than classic techniques such as
 happens-before relation, consider the example in Figure~\ref{fig:nested}.
 %
-
-We propose three different main contributions to reduce the runtime and memory
-overhead while guaranteeing precision and accuracy of the data race detection
-process.
-%
-Firstly, we develop static analysis techniques to identify race free regions
-of code and exclude them from the succeeding runtime analysis.
-%
-Secondly, we build upon the existing Pthreads data race detection tool Tsan to
-dynamically check OpenMP programs.
-%
-Finally, we design and implement a new runtime technique for detecting data races that
-exploit the structured parallelism of OpenMP reducing the 
 
 \begin{figure}
   \centering
