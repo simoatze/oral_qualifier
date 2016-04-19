@@ -3,10 +3,59 @@
 
 The first part of the work has been accomplished and published
 in~\cite{Protze:2014:TPL:2688361.2688369, atzeni2016}.
-%
 
+In~\cite{Protze:2014:TPL:2688361.2688369}, where I am a co-author, we present
+a feasibility study of applying the static analysis and the runtime
+annotations approach introduced in \S~\ref{sec:proposedresearch}.
 %
-I have worked 
+We demonstrate that the static analysis through sequential blacklisting and
+data dependency analysis can respectively help to exclude sequential and race
+free OpenMP regions of code from the runtime analysis in order to reduce the
+overhead.
+%
+While the runtime annotation approach can be used to make \tsan aware of
+OpenMP synchronization primitives, so that it can report correctly data races
+in an OpenMP program, without reporting any of all the false positives
+previously and erroneously detected in the OpenMP runtime.
+
+My main contribution is presented in the paper~\cite{atzeni2016}, which has
+been accepted at IPDPS'16 and I will present in May 2016.
+%
+In this work we introduce \archer a data race detection for OpenMP applications.
+%
+\archer embeds seamlessly the static analyses for sequential blacklisting and
+data dependency on \tsan compiler instrumentation mechanism as LLVM passes and
+provides an annotate version of the OpenMP runtime to enable \tsan on OpenMP
+programs.
+%
+The static analyses in synergy with the instrumentation mechanism identify the
+sequential and the race free regions of code instrumenting only the rest of
+the code potentially racy.
+%
+As a result, the compiler produces an instrumented executable linked against
+the annotated OpenMP runtime provided by \archer.
+%
+The annotations communicate with the \tsan runtime in order to establish an
+implicit happens-before relations, between the involved threads, in those
+cases where the OpenMP runtime adopts synchronization primitive unknown by
+\tsan (e.g. omp barrier, etc.).
+%
+This solution builds the knowledge of the happens-before relation into the
+runtime libraries to obtain precision and accuracy in the data race detection
+process.
+%
+As shown in~\cite{atzeni2016}, this first part of the work shows good results
+in terms of reduction of runtime overhead.
+%
+In fact, \archer, on the OmpSCR~\cite{ompscr} and AMG~\cite{amg2013}
+benchmarks, achieve a speedup of about $25\%$ while maintaining the same or
+better precision and accuracy respect existing data race detectors such as
+\insp and \tsan.
+
+I have conducted and contributed to this work during our current collaboration
+between our research group and a group of computer scientists at the LLNL,
+where I have been a student intern in the past two summers (Summer'14 and
+Summer'15).
 
 \begin{itemize}
 \item Archer Paper
