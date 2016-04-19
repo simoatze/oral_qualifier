@@ -1,0 +1,25 @@
+% \newcommand*{\DEBUG}{}
+\ifdefined\DEBUG
+\newcommand{\simone}[1]{\todo[inline,size=\small, color=green!40]{S: #1}}
+\else
+\newcommand{\simone}[1]{}
+\fi
+\newcommand{\ganesh}[1]{\todo[inline,size=\small, color=yellow!40]{G: #1}}
+\newcommand{\zvonimir}[1]{\todo[inline,size=\small, color=blue!40]{Z: #1}}
+\newcommand{\dong}[1]{\todo[inline,size=\small, color=red!40]{D: #1}}
+\newcommand{\ignacio}[1]{\todo[inline,size=\small, color=yellow!40]{I: #1}}
+\newcommand{\greg}[1]{\todo[inline,size=\small, color=yellow!40]{L: #1}}
+\newcommand{\martin}[1]{\todo[inline,size=\small, color=yellow!40]{M: #1}}
+
+\newcommand{\archer}{\textsc{Archer}\xspace}
+\newcommand{\tsan}{TSan\xspace}
+\newcommand{\iomp}{Intel\circledR OpenMP* Runtime\xspace}
+\newcommand{\omp}{LLVM OpenMP Runtime\xspace}
+\newcommand{\insp}{Intel\circledR Inspector XE\xspace}
+\newcommand{\amg}{AMG2013\xspace}
+
+%%% Local Variables:
+%%% mode: latex
+%%% eval: (flyspell-mode 1)
+%%% TeX-master: "root.tex"
+%%% End:
