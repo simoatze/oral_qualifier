@@ -38,10 +38,19 @@
 
 % \renewcommand*{\bibfont}{\footnotesize}
 
-\lstset{basicstyle=\ttfamily,
-escapeinside={||},
-mathescape=true}
-
+\lstset{language=C++,
+  escapeinside=||,
+  mathescape=true,
+  basicstyle=\ttfamily,
+  showstringspaces=false,
+  keywordstyle=\color{blue}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  % commentstyle=\color{green}\ttfamily,
+  otherkeywords={\#pragma, omp, parallel, barrier, critical, num_threads, shared},
+  breaklines=true,
+  basicstyle=\small
+}
+  
 \newenvironment{blockquote}{\par\medskip\leftskip=4em\rightskip=2em\noindent\ignorespaces}{\par\medskip}
 \input{macros.tex}
 
@@ -53,7 +62,6 @@ mathescape=true}
 \input{background}
 \input{proposed_research}
 \input{accomplished_work}
-\input{milestones}
 \input{timeline}
 
 \bibliographystyle{abbrv}

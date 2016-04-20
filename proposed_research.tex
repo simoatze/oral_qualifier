@@ -5,8 +5,8 @@ At the best of our knowledge there are not, out there, OpenMP data race
 detectors that guarantee low runtime and memory overhead while maintaining
 high precision and accuracy.
 %
-This is already enough to motivate the need for better data race detection
-techniques and tools for structured parallel programming paradigms.
+This motivate the need for better data race detection techniques and tools for
+structured parallel programming paradigms.
 %
 As claimed in \S~\ref{sec:introduction}, we propose several different
 contributions to obtain a better data race detection tool for OpenMP programs.
@@ -15,8 +15,8 @@ In the remainder of this section I will discuss and detail our proposed
 contributions and how the combination of them helps to obtain a better OpenMP
 data race detector.
 
-We exploit OpenMP's structured parallelism to identify guaranteed sequential
-regions within OpenMP code.
+\textbf{Sequential Blacklisting:} We exploit OpenMP's structured parallelism
+to identify guaranteed sequential regions within OpenMP code.
 %
 Such analysis would be difficult to conduct in the context of unstructured
 parallelism (e.g., PThreads).
@@ -31,10 +31,42 @@ The code executed by the main thread is sequential and cannot race with any
 other threads existing in a parallel region.
 %
 Therefore, the instructions executed by the main thread during its sequential
-execution can be excluded from the runtime analysis.
+execution can be excluded from the runtime analysis reducing the overhead.
+
+\textbf{Data Dependency Analysis:} We identify and suppress race free parallel
+loops from race checking.
+%
+Listing~\ref{code:example01} shows an example of two parallel for-loops.
+%
+The first one is easily and automatically parallelizable, the array will be
+divided in different chunks and each of them will be assigned to different
+threads.
+%
+However, the second parallel for-loops has a data dependency in the array
+accesses, which will introduce a data race when the array's chunks are
+assigned to different threads.
+%
+Indeed, it may happen that two threads will access the same locations
+simultaneously without any synchronization mechanism.
+%
+The OpenMP compiler do not apply any check and will parallelize both loop in
+the same way.
+%
+We introduce a data dependency analysis at compiling time that identify loops
+with and without dependencies.
+%
+The firsts will be blacklisted and excluded by the runtime analysis since race
+free, the seconds instead will be checked at runtime.
+
+\textbf{\archer v1:} The two previous static analysis techniques and an
+instrumented version of the OpenMP runtime make the first version of the
+OpenMP data race detector \archer.
 %
 
 
+\textbf{Clock-less runtime algorithm:}
+
+\textbf{\archer v2:}
 
 To motivate the need for better data race detection techniques for structured
 parallelism (i.e. OpenMP), rather than classic techniques such as
@@ -47,6 +79,21 @@ happens-before relation, consider the example in Figure~\ref{fig:nested}.
   \caption{OpenMP nested parallelism}
   \label{fig:nested}
 \end{figure}
+
+\begin{wrapfigure}{R}{0.37\textwidth}
+  \vspace{-2ex}
+  \begin{lstlisting}[language=C++, caption=OpenMP loops with and without loop-carried data dependency., label=code:example01]
+  #pragma omp parallel for
+  for(int i = 0; i < N; i++) {
+    a[i] = a[i] + 1;
+  }
+
+  #pragma omp parallel for
+  for(int i = 0; i < N; i++) {
+    a[i] = a[i + 1];
+  }
+  \end{lstlisting}
+\end{wrapfigure}
 
 \begin{itemize}
 \item Static + dynamic analysis
