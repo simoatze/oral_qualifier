@@ -33,6 +33,13 @@ other threads existing in a parallel region.
 Therefore, the instructions executed by the main thread during its sequential
 execution can be excluded from the runtime analysis reducing the overhead.
 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\textwidth]{figures/nested_parallelism}
+  \caption{OpenMP nested parallelism}
+  \label{fig:nested}
+\end{figure}
+
 \textbf{Data Dependency Analysis:} We identify and suppress race free parallel
 loops from race checking.
 %
@@ -58,28 +65,6 @@ with and without dependencies.
 The firsts will be blacklisted and excluded by the runtime analysis since race
 free, the seconds instead will be checked at runtime.
 
-\textbf{\archer v1:} The two previous static analysis techniques and an
-instrumented version of the OpenMP runtime make the first version of the
-OpenMP data race detector \archer.
-%
-
-
-\textbf{Clock-less runtime algorithm:}
-
-\textbf{\archer v2:}
-
-To motivate the need for better data race detection techniques for structured
-parallelism (i.e. OpenMP), rather than classic techniques such as
-happens-before relation, consider the example in Figure~\ref{fig:nested}.
-%
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.95\textwidth]{figures/nested_parallelism}
-  \caption{OpenMP nested parallelism}
-  \label{fig:nested}
-\end{figure}
-
 \begin{wrapfigure}{R}{0.37\textwidth}
   \vspace{-2ex}
   \begin{lstlisting}[language=C++, caption=OpenMP loops with and without loop-carried data dependency., label=code:example01]
@@ -95,9 +80,33 @@ happens-before relation, consider the example in Figure~\ref{fig:nested}.
   \end{lstlisting}
 \end{wrapfigure}
 
+\textbf{\archer v1:} The two previous static analysis techniques and an
+instrumented version of the OpenMP runtime make the first version of the
+OpenMP data race detector \archer.
+%
+The static analyses will be implemented as a LLVM/Clang passes and integrated
+in the compilation process.
+%
+We will annotate the OpenMP runtime to communicate the \tsan about the
+happens-before relations between threads in presence of unknown
+synchronization mechanisms.
+%
+For example, OpenMP barriers and OpenMP critical section are unknown to the
+\tsan runtime, which would make it reports false positives.
+%
+This first version of \archer is the initial step towards low overhead data
+race detector for large OpenMP applications, and it would also allow us to
+evaluate the benefits of the static analyses in terms of both overheads
+reduction, and precision and accuracy of the data race detection process.
+
+\textbf{Clock-less runtime algorithm:} We design a 
+
+I think we are totally avoiding vector/lamport clocks, instead using only the offset-span clocks and other info (barrier info). 
+To me, this looks like THE DESIGN that one should follow.  The carry-over of TSan is an overkill as the concurrency structure is much simpler for OMP.
+
+\textbf{\archer v2:}
+
 \begin{itemize}
-\item Static + dynamic analysis
-\item Sequential blacklisting due to OpenMP structured parallelism
 \item Barrier intervals
 \item labeling to identify concurrent threads
 \item sort of lock-set
