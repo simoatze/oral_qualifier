@@ -104,7 +104,20 @@ reduction, and precision and accuracy of the data race detection process.
 I think we are totally avoiding vector/lamport clocks, instead using only the offset-span clocks and other info (barrier info). 
 To me, this looks like THE DESIGN that one should follow.  The carry-over of TSan is an overkill as the concurrency structure is much simpler for OMP.
 
-\textbf{\archer v2:}
+\textbf{\archer v2:} The second version of \archer will embed both static
+analyses and the runtime analysis technique for data race detection of
+structured parallelism.
+%
+We plan to integrate \archer in the LLVM/Clang compiler infrastructure and
+guarantee the same ease to use that characterize most LLVM tools.
+%
+In fact, we will provide a new compilation flag (i.e. ``-archer'') that will
+instrument the OpenMP program at compile time and will link it against the
+\archer runtime library.
+%
+The program can then be executed as usual, while the \archer runtime library
+will perform the data race detection providing at the end of the execution a
+detailed report about the detected races.
 
 \begin{itemize}
 \item Barrier intervals

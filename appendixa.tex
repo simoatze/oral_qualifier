@@ -210,145 +210,186 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
 \label{sec:sosrules}
 
 \begin{framed}
-  \[
-  \inference[ParBegin(N)]{
-    gs\; {\rm as}\; (bm, m, n, rw, \sigma) \in GS \\
-    te\; {\rm as}\; (tid, osl, bl) \in TP \\
-    at(tid, \sigma, ParBegin(N)) \\
-    tp' = (tp - \{te\} \cup SpawnChildren(\langle tid, osl, bl \rangle, \sigma, N))\\
-    bm' = bm \cup \{\langle osl,(0,N)\rangle\}\\
-    \sigma' = nxt(\sigma, tid)
-  }
-  {\langle gs, tp \rangle \longrightarrow
-    \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp' \rangle
-  }
-  \]
-  
-  \[
-  \inference[ParEnd(N)]{
-    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
-    te\; as\; (tid, osl, bl) \in TP \\
-    tp' \subseteq tp \\
-    at(tid, \sigma, ParEnd(N)) \\
-    Full(bm, most(osl)) \\
-    bm' = bm - \{\langle most(osl), * \rangle\} \\
-    \sigma' = nxt(\sigma, tid) \\
-    tp'' = tp - tp' \cup GetChildJoin(tp')}
-  {\langle gs, tp \rangle \longrightarrow
-    \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp'' \rangle
-  }
-  \]
+  \begin{flushleft}
+    \resizebox{0.95\textwidth}{!}{
+      \begin{minipage}[b]{0.5\textwidth}
+        \[
+        \inference[ParBegin(N)]{
+          gs\; {\rm as}\; (bm, m, n, rw, \sigma) \in GS \\
+          te\; {\rm as}\; (tid, osl, bl) \in TP \\
+          at(tid, \sigma, ParBegin(N)) \\
+          tp' = (tp - \{te\} \cup SpawnChildren(\langle tid, osl, bl \rangle, \sigma, N))\\
+          bm' = bm \cup \{\langle osl,(0,N)\rangle\}\\
+          \sigma' = nxt(\sigma, tid)
+        }
+        {\langle gs, tp \rangle \longrightarrow
+          \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp' \rangle
+        }
+        \]
+      \end{minipage}
+      \hspace{90pt}
+      \begin{minipage}[b]{0.5\textwidth}
+        \[
+        \inference[ParEnd(N)]{
+          gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+          te\; as\; (tid, osl, bl) \in TP \\
+          tp' \subseteq tp \\
+          at(tid, \sigma, ParEnd(N)) \\
+          Full(bm, most(osl)) \\
+          bm' = bm - \{\langle most(osl), * \rangle\} \\
+          \sigma' = nxt(\sigma, tid) \\
+          tp'' = tp - tp' \cup GetChildJoin(tp')}
+        {\langle gs, tp \rangle \longrightarrow
+          \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp'' \rangle
+        }
+        \]
+      \end{minipage}}
+  \end{flushleft}
 
-  \[
-  \inference[ParEnd(N)]{
-    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
-    te\; as\; (tid, osl, bl) \in TP \\
-    tp' \subseteq tp \\
-    at(tid, \sigma, ParEnd(N)) \\
-    \neg Full(bm, most(osl)) \\
-    bm[most(osl)]\; as\; (count, N) \\
-    bm' = bm \cup \{\langle osl,(count+1,N) \rangle\} \\
-    \sigma' = nxt(\sigma, tid)}
-  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp \rangle}
-  \]
+  \begin{flushleft}
+    \resizebox{0.95\textwidth}{!}{
+      \begin{minipage}[b]{0.5\textwidth}
+        \[
+        \inference[ParEnd(N)]{
+          gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+          te\; as\; (tid, osl, bl) \in TP \\
+          tp' \subseteq tp \\
+          at(tid, \sigma, ParEnd(N)) \\
+          \neg Full(bm, most(osl)) \\
+          bm[most(osl)]\; as\; (count, N) \\
+          bm' = bm \cup \{\langle osl,(count+1,N) \rangle\} \\
+          \sigma' = nxt(\sigma, tid)}
+        {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp \rangle}
+        \]
+      \end{minipage}
+      \hspace{90pt}
+      \begin{minipage}[b]{0.5\textwidth}    
+        \[
+        \inference[AcquireMutex]{
+          gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+          te\; as\; (tid, osl, bl) \in TP \\
+          at(tid, \sigma, AcquireMutex()) \\
+          m = -1 \\
+          m' = tid \\
+          \sigma' = nxt(\sigma, tid)}
+        {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m',n,rw,\sigma' \rangle, tp \rangle}
+        \]
+      \end{minipage}}
+  \end{flushleft}
 
-  \[
-  \inference[AcquireMutex]{
-    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
-    te\; as\; (tid, osl, bl) \in TP \\
-    at(tid, \sigma, AcquireMutex()) \\
-    m = -1 \\
-    m' = tid \\
-    \sigma' = nxt(\sigma, tid)}
-  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m',n,rw,\sigma' \rangle, tp \rangle}
-  \]
+  \begin{flushleft}
+    \resizebox{0.95\textwidth}{!}{
+      \begin{minipage}[b]{0.5\textwidth}
+        \[
+        \inference[ReleaseMutex]{
+          gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+          te\; as\; (tid, osl, bl) \in TP \\
+          at(tid, \sigma, ReleaseMutex()) \\
+          m = t \\
+          m' = -1 \\
+          \sigma' = nxt(\sigma, tid)}
+        {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m',n,rw,\sigma' \rangle, tp \rangle}
+        \]
+      \end{minipage}
+      \hspace{90pt}
+      \begin{minipage}[b]{0.5\textwidth}    
+        \[
+        \inference[AcquireNutex(name)]{
+          gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+          te\; as\; (tid, osl, bl) \in TP \\
+          at(tid, \sigma, AcquireNutex(name)) \\
+          n[name] = -1 \\
+          n' = n[name \rightarrow tid] \\
+          \sigma' = nxt(\sigma, tid)}
+        {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n',rw,\sigma' \rangle, tp \rangle}
+        \]
+      \end{minipage}}
+  \end{flushleft}
 
-  \[
-  \inference[ReleaseMutex]{
-    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
-    te\; as\; (tid, osl, bl) \in TP \\
-    at(tid, \sigma, ReleaseMutex()) \\
-    m = t \\
-    m' = -1 \\
-    \sigma' = nxt(\sigma, tid)}
-  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m',n,rw,\sigma' \rangle, tp \rangle}
-  \]
+  \begin{flushleft}
+    \resizebox{0.95\textwidth}{!}{
+      \begin{minipage}[b]{0.5\textwidth}
+        \[
+        \inference[ReleaseNutex(name)]{
+          gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+          te\; as\; (tid, osl, bl) \in TP \\
+          at(tid, \sigma, ReleaseNutex(name)) \\
+          n[name] = tid \\
+          n' = n[name \rightarrow -1] \\
+          \sigma' = nxt(\sigma, tid)}
+        {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n',rw,\sigma' \rangle, tp \rangle}
+        \]
+      \end{minipage}
+      \hspace{90pt}
+      \begin{minipage}[b]{0.5\textwidth}            
+        \[
+        \inference[LoadStore]{
+          gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+          te\; as\; (tid, osl, bl) \in TP \\
+          at(tid, \sigma, LoadStore(addr, mat)) \\
+          rw' = AddRW(tid, osl, bl, addr, mat, mutex, nutex) \\
+          \sigma' = nxt(\sigma, tid)}
+        {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n,rw',\sigma' \rangle, tp \rangle}
+        \]
+      \end{minipage}}
+  \end{flushleft}
 
-  \[
-  \inference[AcquireNutex(name)]{
-    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
-    te\; as\; (tid, osl, bl) \in TP \\
-    at(tid, \sigma, AcquireNutex(name)) \\
-    n[name] = -1 \\
-    n' = n[name \rightarrow tid] \\
-    \sigma' = nxt(\sigma, tid)}
-  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n',rw,\sigma' \rangle, tp \rangle}
-  \]
+  \begin{flushleft}
+    \resizebox{0.95\textwidth}{!}{
+      \begin{minipage}[b]{0.5\textwidth}
+        \[
+        \inference[Barrier(bid)]{
+          gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+          te\; as\; (tid, osl, bl) \in TP \\
+          at(tid, \sigma, Barrier(bid)) \\
+          Full(bm, most(osl)) \\
+          bm' = bm - \{\langle osl,* \rangle\} \\
+          \sigma' = nxt(\sigma, tid)}
+        {\langle gs, tp \rangle \longrightarrow
+          \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp \rangle
+        }
+        \]
+      \end{minipage}
+      \hspace{90pt}
+      \begin{minipage}[b]{0.5\textwidth}    
+        \[
+        \inference[Barrier(bid)]{
+          gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+          te\; as\; (tid, osl, bl) \in TP \\
+          at(tid, \sigma, Barrier(bid)) \\
+          \neg Full(bm, most(osl)) \\
+          bm[most(osl)]\; as\; (count, N) \\
+          te' as (tid, osl, bid) \\
+          tp' = tp - te \cup \{ te' \} \\
+          bm' = bm \cup \{\langle osl,(count+1,N) \rangle\} \\
+          \sigma' = nxt(\sigma, tid)}
+        {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp' \rangle}
+        \]
+      \end{minipage}}
+  \end{flushleft}
 
-  \[
-  \inference[ReleaseNutex(name)]{
-    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
-    te\; as\; (tid, osl, bl) \in TP \\
-    at(tid, \sigma, ReleaseNutex(name)) \\
-    n[name] = tid \\
-    n' = n[name \rightarrow -1] \\
-    \sigma' = nxt(\sigma, tid)}
-  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n',rw,\sigma' \rangle, tp \rangle}
-  \]
-
-  \[
-  \inference[LoadStore]{
-    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
-    te\; as\; (tid, osl, bl) \in TP \\
-    at(tid, \sigma, LoadStore(addr, mat)) \\
-    rw' = AddRW(tid, osl, bl, addr, mat, mutex, nutex) \\
-    \sigma' = nxt(\sigma, tid)}
-  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n,rw',\sigma' \rangle, tp \rangle}
-  \]
-
-  \[
-  \inference[Barrier(bid)]{
-    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
-    te\; as\; (tid, osl, bl) \in TP \\
-    at(tid, \sigma, Barrier(bid)) \\
-    Full(bm, most(osl)) \\
-    bm' = bm - \{\langle osl,* \rangle\} \\
-    \sigma' = nxt(\sigma, tid)}
-  {\langle gs, tp \rangle \longrightarrow
-    \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp \rangle
-  }
-  \]
-
-  \[
-  \inference[Barrier(bid)]{
-    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
-    te\; as\; (tid, osl, bl) \in TP \\
-    at(tid, \sigma, Barrier(bid)) \\
-    \neg Full(bm, most(osl)) \\
-    bm[most(osl)]\; as\; (count, N) \\
-    te' as (tid, osl, bid) \\
-    tp' = tp - te \cup \{ te' \} \\
-    bm' = bm \cup \{\langle osl,(count+1,N) \rangle\} \\
-    \sigma' = nxt(\sigma, tid)}
-  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp' \rangle}
-  \]
-
-  \[
-  \inference[Barrier(bid)]{
-    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
-    te_1\; as\; (tid_1, osl1, bl1) \in tp\\
-    te_2\; as\; (tid_1, osl1, bl1) \in tp \\
-    (tid_1 \neq tid_2) \\
-    Concurrent(osl, tid_1, tid_2) \\
-    i \in rw[tid_1] \\
-    j \in rw[tid_2] \\
-    (rw[tid_1][i].addr == rw[tid_2][j].addr) \\
-    (rw[tid_1][i].mat == W) \vee (rw[tid_2][j].mat == W) \\
-    (rw[tid_1][i].mutex == -1) \vee (rw[tid_2][j].mutex == -1) \\
-    (rw[tid_1][i].nutex \cap rw[tid_2][j].nutex = \emptyset) \\
-    (rw[tid_1][i].bl == rw[tid_2][j].bl) \vee (rw[tid_1][i].bl \parallel rw[tid_2][j].bl)}
-  {\langle gs, tp \rangle \rightarrow RaceFail(\sigma, addr, tid_1, tid_2)}
-  \]
+  \begin{flushleft}
+    \begin{minipage}[b]{1\textwidth}
+      \centering
+      \resizebox{0.55\textwidth}{!}{
+        $\inference[RaceCheck]{
+          gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+          te_1\; as\; (tid_1, osl1, bl1) \in tp\\
+          te_2\; as\; (tid_1, osl1, bl1) \in tp \\
+          (tid_1 \neq tid_2) \\
+          Concurrent(osl, tid_1, tid_2) \\
+          i \in rw[tid_1] \\
+          j \in rw[tid_2] \\
+          (rw[tid_1][i].addr == rw[tid_2][j].addr) \\
+          (rw[tid_1][i].mat == W) \vee (rw[tid_2][j].mat == W) \\
+          (rw[tid_1][i].mutex == -1) \vee (rw[tid_2][j].mutex == -1) \\
+          (rw[tid_1][i].nutex \cap rw[tid_2][j].nutex = \emptyset) \\
+          (rw[tid_1][i].bl == rw[tid_2][j].bl) \vee (rw[tid_1][i].bl \parallel rw[tid_2][j].bl)}
+        {\langle gs, tp \rangle \rightarrow RaceFail(\sigma, addr, tid_1, tid_2)}
+        $
+      }
+    \end{minipage}
+  \end{flushleft}
 \end{framed}
 
 %%% Local Variables:
