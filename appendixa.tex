@@ -1,7 +1,355 @@
 \section{OpenMP Concurrency Operational Semantics}
 \label{sec:appendixa}
 
+\subsection{Convention}
+\label{subsec:convention}
 
+\begin{compactitem}
+\item $\N$ is the set of natural numbers, $\{0,1,2,\ldots\}$.
+\item $x\in\N$ can be treated as a set $\{0,\ldots,x-1\}$ as in set theory.
+  Thus, $0=\{\}$, $1=\{0\}$, $2=\{0,1\}$, $3=\{0,1,2\}$, etc.
+  %
+  This is standard in set-theory (usage courtesy of Milner).
+  %
+  Whenever we treat a member of $\N$ as a number as well as a set, we'll make
+  sure to provide a hint.
+\item $t\in TID$ is a thread ID (a natural number) for some $TID\in \N$ ($TID$
+  thread IDs are allowed).
+\item Let $ADDR\in\N$ be the range of memory addresses accessed by the various
+  threads.
+\end{compactitem}
+
+\subsection{Offset-Span Labels}
+\label{subsec:osl}
+
+We follow the concept of offset-span labels introduced in the paper of
+Mellor-Crummey~\cite{Mellor-Crummey:1991:ODD:125826.125861}.
+%
+An offset-span label ($osl$ for short) labels each thread's execution point
+with a sequence of pairs, marking its lineage in the concurrency structure
+defined by prior forks and joins.
+%
+The domain of $OSL = ((\N\times\N))^{\N}$, i.e. each member $osl\in OSL$ is a
+sequence of pairs
+\[ \langle a_1,b_1\rangle, \langle a_2,b_2\rangle,\ldots,\langle
+a_n,b_n\rangle\] suppose $osl_1, osl_2\in OSL$.
+%
+These labels are sequential exactly when one of the OSLs (say $osl_1$) is a
+prefix of the other.
+%
+Other wise, they are concurrent.
+%
+For further details, please see~\cite{Mellor-Crummey:1991:ODD:125826.125861}.
+
+\subsection{System State}
+\label{subsec:systemstate}
+
+The state of the system consists of a global states $GS$ and a set of thread
+local states $TP$ (Thread Pool).
+%
+The total state $ts$ of any system is a pair ``Global State, Thread Pool;''
+i.e., a specific total state $ts$ is:
+\[ ts = \langle gs, tp \rangle \]
+\noindent Each total state $ts$ comes from the domain $T$S, where
+$TS = GS\times TP$.
+
+\noindent Each global state $gs$ is a 5-tuple:
+\[ \langle bm, m, n, rw, \sigma \rangle \]
+\noindent Each global state $gs$ comes from the domain $GS$, where
+\[ TS = BM\times M\times N\times RW\times \Sigma \]
+
+\noindent where:
+%
+\begin{compactitem}
+\item The domain $BM = ParRegID \mapsto (\N\times \N)$.  Thus, for each
+  $bm\in BM$, we have $bm\; :\; ParRegID \mapsto (\N\times \N)$.
+  %
+  Given a $p\in ParRegID$, $bm$ returns a pair of natural numbers $(a,b)$,
+  where $a$ is the ``current Barrier Count'' and $b$ is the ``target Barrier
+  Count.''
+  %
+  When a thread $t$ with offset span label $osl$ executes a $ParBegin(N)$
+  instruction, $N$ threads are created, and an entry
+  $\langle osl, (0,N)\rangle$ is added to function $bm$\footnotemark.
+  %
+  \footnotetext{Recall that functions are single-valued relations, or sets of
+    pairs with unique second component for each given first component.  Thus,
+    $\{\langle osl,(0,N)\rangle\}$ is a function. We will allow functions to
+    evolve, i.e. undefined for items explicitly added.}
+  %
+  The first field $0$ will be incremented each time we close a barrier or a
+  parallel region, in a manner to be described momentarily.
+  %
+  Threads that have to meet a barrier or have to hit the $ParEnd$ constructs.
+
+\item Mutex $m$ comes from domain $M$, where $M=\{-1\}\cup \N$.  Each $m$ is
+  initialized to $-1$ when the mutex is free.
+  %
+  When thread $t\in TID$ acquires the mutex, we record the value $t$ in $m$,
+  indicating that the mutex is taken, and also taken by which thread.
+
+\item ``Nutex'' $n$ comes from domain $N$ where
+  $N = Names \mapsto (\{-1\} \cup TID)$.
+  %
+  That is, given a named mutex name $n \in Names$, $N[n] = -1$ means that this
+  named mutex (``nutex'') is free.
+  %
+  Otherwise, $N[n] = t$, recording the fact that this nutex is held by thread
+  $t$.
+
+\item Let memory access-type $MAT=\{R,W\}$.
+
+\item $rw\in RW$ is a tuple that maintains all the memory accesses of each
+  thread in the system.
+  %
+  We have
+  $RW = TID\times OSL \times \N \times ADDR \times MAT \times M\times N$.
+  %
+  Each memory access performed by thread $t$ is recorded as the tuple
+  \[ \langle tid, osl, bl, addr, mat, mutex, nutex \rangle \] where:
+  \begin{compactitem}
+  \item $tid\in TID$ is the thread ID;
+  \item $osl\in OSL$ is the offset-span label;
+  \item $bl\in \N$ is the barrier label of the last barrier seen by the thread
+    $t$;
+  \item $addr\in ADDR$ is the memory address;
+  \item $type\in\{R,W\}$ records reads or writes;
+  \item $mutex$ is the mutex state (value of $M$ in $GS$) at the time of the
+    access;
+  \item $nutex$ is the nutex state (value of $N$ in $GS$) at the time of the
+    access.
+  \end{compactitem}
+
+\item $\sigma\in\Sigma$ is the data state of the system, as described earlier.
+\end{compactitem}
+
+\vspace{2ex}
+
+The local state $TP$ is the thread pool that contains a list of 3-tuples, each
+of which is the local state of a thread:
+\[ \langle tid, osl, bl \rangle \]
+
+The domain $TP=2^{TID\times OSL\times \N}$ where:
+
+\begin{compactitem}
+\item $t\in TID$ is thread ID of the thread;
+\item $osl\in OSL$ is an offset-span label;
+\item $bl\in\N$ is the label of the barrier the thread has witnessed last.
+  %
+  We assume that each barrier instruction is of the form $bar(L)$ where
+  $L\in\N$ carries the barrier number.
+  %
+  A thread crossing a barrier sets its $bl$ to the value $L$.
+\end{compactitem}
+
+\subsection{Helper Functions and Predicates}
+\label{subsec:helper}
+
+\begin{compactitem}
+\item $as$: is used as in Ocaml (it allows a name for a whole structure, as
+  well as helps us refer to the inner details of the structure).
+\item $most(lst)$: we define $most$ as a function that return the same list
+  given in input except the last element (i.e. in Python lst[:-1]).
+\item $\parallel$: This operator is used to describe that two different
+  threads are concurrent.
+  %
+  In particular, given two offset-span labels $l1$ and $l2$, $l1 \parallel l2$
+  (read $l1$ and $l2$ are concurrent) means that the two threads associated to
+  the two offset-span labels are concurrent.
+  %
+  In case the labels represent barrier labels, it means that the two barrier
+  are concurrent, in other words they happen in two different (nested)
+  parallel regions.
+\item $SpawnChildren(\langle ptid, posl, pbl \rangle, \sigma, N)$: Given the
+  parent's TID ($ptid$), offset-span label ($posl$) and barrier label ($pbl$),
+  this function creates a pool of $N$ threads -- specifically, the local
+  states of these threads $\langle tid, osl, bl \rangle$.
+  %
+  It initializes the offset-span label $osl$ for each thread created using the
+  rules in \S\ref{sec:osl}, by extending $posl$ with pairs $[0,N]$ through
+  $[N-1,N]$.
+  %
+  The $bl$ is set to $pbl$.
+  %
+  The TIDs are somehow uniquely generated ($osl$ could be used as an index
+  into an evolving TID bijection).
+\item $GetChildJoin(tp)$: returns the single thread-state triple that results
+  from fusing all the threads in the thread pool $tp$.
+  %
+  The offset-span labels are all chopped, and the single data state that is
+  carried forward has the right PC and data state, going forward.
+\item $Concurrent(OSL, t1, t2)$ is as described in \S\ref{sec:osl}.
+\item Function $AddRW(\langle tid, osl, bl, addr, mat, m, n \rangle)$ adds the
+  access into the RW Structure.
+  %
+  The record says ``an access by $tid$ with offset-span label $osl$ and
+  barrier label $bl$ is performed at address $addr$ with memory access type
+  $mat$, when the mutex state is $m$ and the nutex state is $n$.''
+\item $Full(bm, osl)$: This predicate keeps the counts the number of threads
+  that have reached a $ParEnd(N)$ (or a $Barrier(bid)$) construct.
+  %
+  In order to count the threads, it uses the structure $bm$ which is indexed
+  by the $ParRegID$ represented by the offset-span label $osl$.
+  %
+  In other word, the predicate $Full$ means that other threads have reached
+  the construct and have incremented the counter in the $bm$ structure.
+  %
+  From a functional language point of view $Full$ would look like:
+
+  \begin{center}
+    \lstset{language=[Objective]Caml}
+    \begin{lstlisting}
+      let Full(bm, osl) =
+         let (count, N) = bm[osl]
+         in (count == N - 1)
+    \end{lstlisting}
+  \end{center}
+\end{compactitem}
+
+\subsection{Structured Operational Semantics Rules}
+\label{sec:sosrules}
+
+\begin{framed}
+  \[
+  \inference[ParBegin(N)]{
+    gs\; {\rm as}\; (bm, m, n, rw, \sigma) \in GS \\
+    te\; {\rm as}\; (tid, osl, bl) \in TP \\
+    at(tid, \sigma, ParBegin(N)) \\
+    tp' = (tp - \{te\} \cup SpawnChildren(\langle tid, osl, bl \rangle, \sigma, N))\\
+    bm' = bm \cup \{\langle osl,(0,N)\rangle\}\\
+    \sigma' = nxt(\sigma, tid)
+  }
+  {\langle gs, tp \rangle \longrightarrow
+    \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp' \rangle
+  }
+  \]
+  
+  \[
+  \inference[ParEnd(N)]{
+    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+    te\; as\; (tid, osl, bl) \in TP \\
+    tp' \subseteq tp \\
+    at(tid, \sigma, ParEnd(N)) \\
+    Full(bm, most(osl)) \\
+    bm' = bm - \{\langle most(osl), * \rangle\} \\
+    \sigma' = nxt(\sigma, tid) \\
+    tp'' = tp - tp' \cup GetChildJoin(tp')}
+  {\langle gs, tp \rangle \longrightarrow
+    \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp'' \rangle
+  }
+  \]
+
+  \[
+  \inference[ParEnd(N)]{
+    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+    te\; as\; (tid, osl, bl) \in TP \\
+    tp' \subseteq tp \\
+    at(tid, \sigma, ParEnd(N)) \\
+    \neg Full(bm, most(osl)) \\
+    bm[most(osl)]\; as\; (count, N) \\
+    bm' = bm \cup \{\langle osl,(count+1,N) \rangle\} \\
+    \sigma' = nxt(\sigma, tid)}
+  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp \rangle}
+  \]
+
+  \[
+  \inference[AcquireMutex]{
+    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+    te\; as\; (tid, osl, bl) \in TP \\
+    at(tid, \sigma, AcquireMutex()) \\
+    m = -1 \\
+    m' = tid \\
+    \sigma' = nxt(\sigma, tid)}
+  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m',n,rw,\sigma' \rangle, tp \rangle}
+  \]
+
+  \[
+  \inference[ReleaseMutex]{
+    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+    te\; as\; (tid, osl, bl) \in TP \\
+    at(tid, \sigma, ReleaseMutex()) \\
+    m = t \\
+    m' = -1 \\
+    \sigma' = nxt(\sigma, tid)}
+  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m',n,rw,\sigma' \rangle, tp \rangle}
+  \]
+
+  \[
+  \inference[AcquireNutex(name)]{
+    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+    te\; as\; (tid, osl, bl) \in TP \\
+    at(tid, \sigma, AcquireNutex(name)) \\
+    n[name] = -1 \\
+    n' = n[name \rightarrow tid] \\
+    \sigma' = nxt(\sigma, tid)}
+  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n',rw,\sigma' \rangle, tp \rangle}
+  \]
+
+  \[
+  \inference[ReleaseNutex(name)]{
+    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+    te\; as\; (tid, osl, bl) \in TP \\
+    at(tid, \sigma, ReleaseNutex(name)) \\
+    n[name] = tid \\
+    n' = n[name \rightarrow -1] \\
+    \sigma' = nxt(\sigma, tid)}
+  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n',rw,\sigma' \rangle, tp \rangle}
+  \]
+
+  \[
+  \inference[LoadStore]{
+    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+    te\; as\; (tid, osl, bl) \in TP \\
+    at(tid, \sigma, LoadStore(addr, mat)) \\
+    rw' = AddRW(tid, osl, bl, addr, mat, mutex, nutex) \\
+    \sigma' = nxt(\sigma, tid)}
+  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n,rw',\sigma' \rangle, tp \rangle}
+  \]
+
+  \[
+  \inference[Barrier(bid)]{
+    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+    te\; as\; (tid, osl, bl) \in TP \\
+    at(tid, \sigma, Barrier(bid)) \\
+    Full(bm, most(osl)) \\
+    bm' = bm - \{\langle osl,* \rangle\} \\
+    \sigma' = nxt(\sigma, tid)}
+  {\langle gs, tp \rangle \longrightarrow
+    \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp \rangle
+  }
+  \]
+
+  \[
+  \inference[Barrier(bid)]{
+    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+    te\; as\; (tid, osl, bl) \in TP \\
+    at(tid, \sigma, Barrier(bid)) \\
+    \neg Full(bm, most(osl)) \\
+    bm[most(osl)]\; as\; (count, N) \\
+    te' as (tid, osl, bid) \\
+    tp' = tp - te \cup \{ te' \} \\
+    bm' = bm \cup \{\langle osl,(count+1,N) \rangle\} \\
+    \sigma' = nxt(\sigma, tid)}
+  {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm',m,n,rw,\sigma'\rangle, tp' \rangle}
+  \]
+
+  \[
+  \inference[Barrier(bid)]{
+    gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+    te_1\; as\; (tid_1, osl1, bl1) \in tp\\
+    te_2\; as\; (tid_1, osl1, bl1) \in tp \\
+    (tid_1 \neq tid_2) \\
+    Concurrent(osl, tid_1, tid_2) \\
+    i \in rw[tid_1] \\
+    j \in rw[tid_2] \\
+    (rw[tid_1][i].addr == rw[tid_2][j].addr) \\
+    (rw[tid_1][i].mat == W) \vee (rw[tid_2][j].mat == W) \\
+    (rw[tid_1][i].mutex == -1) \vee (rw[tid_2][j].mutex == -1) \\
+    (rw[tid_1][i].nutex \cap rw[tid_2][j].nutex = \emptyset) \\
+    (rw[tid_1][i].bl == rw[tid_2][j].bl) \vee (rw[tid_1][i].bl \parallel rw[tid_2][j].bl)}
+  {\langle gs, tp \rangle \rightarrow RaceFail(\sigma, addr, tid_1, tid_2)}
+  \]
+\end{framed}
 
 %%% Local Variables:
 %%% mode: latex
