@@ -20,8 +20,8 @@ OpenMP~\cite{ompdoc}, which guarantees portability and ease of use.
 %
 In fact, we are collaborating with computational scientists at Lawrence
 Livermore National Laboratory (LLNL), one of the world's largest computing
-facilities, where the main task is the porting of critical multiphysics
-application~\cite{llnl-apps} to OpenMP.
+facilities, where the current main task is the porting of critical
+multiphysics application~\cite{llnl-apps} to OpenMP.
 
 OpenMP is paramount to portable shared memory parallel programming - yet,
 porting large HPC applications to OpenMP is error-prone.
@@ -43,8 +43,8 @@ While data race is a well-known problem and many Pthreads data race detection
 tools have been proposed over the past twenty years, none or just a few of
 them are actually able to analyze OpenMP programs.
 
-Data race detection research has been focused both on static and dynamic
-analysis techniques.
+Data race detection research has focused both on static and dynamic analysis
+techniques.
 %
 Static analysis techniques allow to reason about all the inputs of the program
 and the interleavings of the threads, and they are fairly scalable and fast
@@ -79,34 +79,6 @@ resources to run the tools.
 We definitely need better techniques, either static or dynamic, to detect data
 races in large structured parallel applications, that guarantee precision and
 accuracy using a fairly small amount of runtime and memory resources.
-
-\begin{itemize}
-  \item Real-cases: see HYDRA
-  \item Races and benign races
-  \item sequential blacklisting, data dependency analysis, etc.
-  \item Goal of the dissertation: data race detector tool, low overhead, etc.
-  \item Data races~\cite{sus_common_2008} are particularly egregious.
-    % 
-    Conventional testing is ineffective for locating data races.
-    % 
-    Undetected data races are especially problematic for large applications,
-    leading to show-stopper bugs.
-    % 
-    Existing approaches to OpenMP data race detection rely on pure static or
-    dynamic analysis techniques.
-    % 
-    While effective on small- to medium-sized applications, pure approaches
-    are unable to locate races in non-trivial HPC applications - especially
-    those that involve hybrid concurrency.
-    % 
-    While runtime approaches are known for their accuracy, even
-    state-of-the-art techniques~\cite{Flanagan:2009,tsan} can incur
-    a factor of 100 of slowdown and over 8 times memory overhead on large HPC
-    applications.
-    % 
-    While static analysis based techniques incur little runtime overhead, they
-    are imprecise and can produce false positives or miss errors.
-\end{itemize}
 
 \emph{The goal of this dissertation is to provide a sound and precise data
   race detection tool for large OpenMP applications that combine static and
