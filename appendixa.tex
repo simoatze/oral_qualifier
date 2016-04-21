@@ -257,7 +257,22 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
         \]
       \end{minipage}
       \hspace{90pt}
-      \begin{minipage}[b]{0.5\textwidth}    
+      \begin{minipage}[b]{0.5\textwidth}
+                \[
+        \inference[LoadStore]{
+          gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
+          te\; as\; (tid, osl, bl) \in TP \\
+          at(tid, \sigma, LoadStore(addr, mat)) \\
+          rw' = AddRW(tid, osl, bl, addr, mat, mutex, nutex) \\
+          \sigma' = nxt(\sigma, tid)}
+        {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n,rw',\sigma' \rangle, tp \rangle}
+        \]
+      \end{minipage}}
+  \end{flushleft}
+
+  \begin{flushleft}
+    \resizebox{0.95\textwidth}{!}{
+      \begin{minipage}[b]{0.5\textwidth}
         \[
         \inference[AcquireMutex]{
           gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
@@ -268,11 +283,8 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
           \sigma' = nxt(\sigma, tid)}
         {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m',n,rw,\sigma' \rangle, tp \rangle}
         \]
-      \end{minipage}}
-  \end{flushleft}
-
-  \begin{flushleft}
-    \resizebox{0.95\textwidth}{!}{
+      \end{minipage}
+      \hspace{90pt}
       \begin{minipage}[b]{0.5\textwidth}
         \[
         \inference[ReleaseMutex]{
@@ -284,9 +296,12 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
           \sigma' = nxt(\sigma, tid)}
         {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m',n,rw,\sigma' \rangle, tp \rangle}
         \]
-      \end{minipage}
-      \hspace{90pt}
-      \begin{minipage}[b]{0.5\textwidth}    
+      \end{minipage}}
+  \end{flushleft}
+
+  \begin{flushleft}
+    \resizebox{0.95\textwidth}{!}{
+      \begin{minipage}[b]{0.5\textwidth}
         \[
         \inference[AcquireNutex(name)]{
           gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
@@ -297,12 +312,9 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
           \sigma' = nxt(\sigma, tid)}
         {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n',rw,\sigma' \rangle, tp \rangle}
         \]
-      \end{minipage}}
-  \end{flushleft}
-
-  \begin{flushleft}
-    \resizebox{0.95\textwidth}{!}{
-      \begin{minipage}[b]{0.5\textwidth}
+      \end{minipage}
+      \hspace{90pt}
+      \begin{minipage}[b]{0.5\textwidth}            
         \[
         \inference[ReleaseNutex(name)]{
           gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
@@ -312,18 +324,6 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
           n' = n[name \rightarrow -1] \\
           \sigma' = nxt(\sigma, tid)}
         {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n',rw,\sigma' \rangle, tp \rangle}
-        \]
-      \end{minipage}
-      \hspace{90pt}
-      \begin{minipage}[b]{0.5\textwidth}            
-        \[
-        \inference[LoadStore]{
-          gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
-          te\; as\; (tid, osl, bl) \in TP \\
-          at(tid, \sigma, LoadStore(addr, mat)) \\
-          rw' = AddRW(tid, osl, bl, addr, mat, mutex, nutex) \\
-          \sigma' = nxt(\sigma, tid)}
-        {\langle gs, tp \rangle \longrightarrow \langle gs'\; {\rm as}\; \langle bm,m,n,rw',\sigma' \rangle, tp \rangle}
         \]
       \end{minipage}}
   \end{flushleft}
