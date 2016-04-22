@@ -31,14 +31,34 @@ following algorithms: happens-before, lockset or both (hybrid techniques).
 %
 These algorithms are described in detail
 in~\cite{O'Callahan:2003:HDD:966049.781528}.
-
+%
 Most of dynamic data race detectors use these algorithms to detect races in
 Pthreads programs.
 %
-None of them is actually able to identify correctly data races in OpenMP
-programs.
+In fact, existing tools, such as \tsan~\cite{tsan}, implement a very optimized
+happens-before based techniques that guarantee high precision and accuracy, a
+runtime overhead of $5x-20x$, and a memory overhead of $2x-10x$.
 %
+However, none of them is actually able to identify correctly data races in OpenMP
+programs.
 
+Even though, an OpenMP program is typically translated in a Pthreads program
+by the compiler, these tools often miss races or report false positives
+because cannot recognize synchronization mechanism used by the OpenMP
+programming paradigm such as barriers, critical sections, etc.
+%
+Only existing commercial tools, such as \insp or \sun, provide data race
+detection for OpenMP programs through a binary instrumentation of the
+executable, and generally applying an implementation of the happens-before
+relation.
+%
+Experiments show that such tools~\cite{Protze:2014:TPL:2688361.2688369} are
+not very precise and accurate (indeed they often miss races and report many
+false alarms).
+%
+Furthermore they generate a very high runtime and memory overhead that make
+their usage often unfeasible especially with large scientific HPC
+applications.
 
 %%% Local Variables:
 %%% mode: latex
