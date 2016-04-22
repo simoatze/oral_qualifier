@@ -205,16 +205,12 @@ check at every memory accesses.
 The real race-check is illustrated by the ``RaceCheck'' rule in
 appendix~\ref{subsec:sosrules} on the smaller set of memory accesses.
 %
-The OpenMP Tools Application Programming Interfaces (OMPD)~\cite{ompt}
+The OpenMP Tools Application Programming Interfaces (OMPT)~\cite{ompt}
 implemented by the OpenMP runtime provides all the information to build the
 concurrency structured of an OpenMP program at runtime.
 %
 We will indeed based our implementation on the OMPT API guaranteeing a
 standard and portable solution of the data race detection algorithm.
-
-\begin{itemize}
-\item OMPT
-\end{itemize}
 
 \begin{wrapfigure}{R}{0.5\textwidth}
   \centering
