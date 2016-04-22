@@ -18,16 +18,23 @@ program, since they can reason about all the inputs and the thread
 interleavings, however are also known to generate many false
 positives~\cite{Pratikakis:2011:LPS:1889997.1890000} and miss
 races~\cite{Voung:2007:RSR:1287624.1287654}.
+%
+Dynamic race detection techniques analyze a specific trace of a program
+that is actually executed
+%
+Dynamic race detectors process the program’s events in parallel during the
+execution~\cite{Lamport:1978:TCO:359545.359563, Savage:1997:EDD:269005.266641,
+  Flanagan:2009, tsan}.
+%
+A large number of dynamic race detection tools are based on one of the
+following algorithms: happens-before, lockset or both (hybrid techniques).
+%
+These algorithms are described in detail
+in~\cite{O'Callahan:2003:HDD:966049.781528}.
 
-\begin{itemize}
-\item Existing techniques
-\item Happens-before
-\item Lock-set
-\item Hybrid
-\item Pros and cons
-\item Thread-sanitizer
-\item Pros and cons
-\end{itemize}
+Most of dynamic data race detectors use these algorithm to detect races in
+Pthreads programs.
+%
 
 \subsection{Happens-Before relation}
 \label{subsec:happensbefore}
