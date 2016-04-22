@@ -167,8 +167,54 @@ the state of the system.
 Moreover, it can also fire the ``RaceCheck'' rule at any point of the state
 machine execution, flagging the existence of a race.
 
+The transition system is an ideal state machine that guarantees to detect
+every race present in an OpenMP program, without reporting any false positive.
+%
+From the formal point of view, the transition system is a machine with
+infinite memory and in fact it keeps track of every memory access performed by
+any thread in the system.
+%
+This approach would not be feasible in the real-world since the runtime and
+memory resources are limited, but most importantly because our main goal is to
+obtain a low runtime and memory overhead data race detection algorithm.
+%
+Even though the state machine is an ideal system, it allows to model all the
+corner cases in the OpenMP race-checking problem and design a real better
+algorithm that guarantee correctness and soundness.
 
-OMPT/OMPD
+We believe that the transition system can help to design a precise and fast
+data race detection algorithm.
+%
+We intend to implement an algorithm that at runtime models the concurrency
+structure of the parallel regions of an OpenMP program.
+%
+The concurrent model of the program will be stored in a lock-free and fast
+data structure~\cite{5871597, Matveev:2015:RLS:2815400.2815406} that can
+be concurrently read and written by multiple threads.
+%
+Furthermore, we will rely in another lock-free and fast data structure to
+maintain a smaller representative set of memory accesses performed by the
+threads.
+%
+We plan to perform the data race detection check at every barrier checkpoint.
+%
+This will limit the number of race checks performed during the program
+execution, differently from vector-clock techniques that generally perform the
+check at every memory accesses.
+%
+The real race-check is illustrated by the ``RaceCheck'' rule in
+appendix~\ref{subsec:sosrules} on the smaller set of memory accesses.
+%
+The OpenMP Tools Application Programming Interfaces (OMPD)~\cite{ompt}
+implemented by the OpenMP runtime provides all the information to build the
+concurrency structured of an OpenMP program at runtime.
+%
+We will indeed based our implementation on the OMPT API guaranteeing a
+standard and portable solution of the data race detection algorithm.
+
+\begin{itemize}
+\item OMPT
+\end{itemize}
 
 \begin{wrapfigure}{R}{0.5\textwidth}
   \centering
