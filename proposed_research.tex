@@ -136,10 +136,39 @@ since there is always a join point that separate them, furthermore in OpenMP,
 at the end of each parallel region there is an implicit barrier which
 synchronize all the threads before starting the next parallel task.
 %
-We base our idea of data race detection to these facts, and exploit an existing
-thread labeling approach for
-fork-join~\cite{Mellor-Crummey:1991:ODD:125826.125861} models to identify if
-two threads are concurrent.
+We base our idea of data race detection to these facts, and exploit an
+existing thread labeling approach for
+fork-join~\cite{Mellor-Crummey:1991:ODD:125826.125861} models to quickly
+identify if two threads are concurrent.
+%
+In this way, we can limit the data race detection only to the concurrent
+threads~\footnote{A common happens-before algorithm based on vector clocks
+  would perform a race check also on non-concurrent threads, because of its
+  lack of knowledge on the concurrency structure of the OpenMP program.}.
+
+We formally define the concurrency structure of OpenMP from the point of view
+of race checking.
+%
+To the best of our knowledge the OpenMP concurrency model has never been
+formally documented.
+%
+We define a state machine and a set of transition rules that model the
+behavior of an OpenMP program.                            
+%
+The appendix~\ref{sec:appendixa} shows the formal definition of the state
+machine.
+%
+We abstract away from data state as much as possible, using uninterpreted
+functions to occasionally bridge the gap.
+%
+The transition system can fire, for any thread, any rule at any point changing
+the state of the system.
+%
+Moreover, it can also fire the ``RaceCheck'' rule at any point of the state
+machine execution, flagging the existence of a race.
+
+
+OMPT/OMPD
 
 \begin{wrapfigure}{R}{0.5\textwidth}
   \centering
@@ -147,14 +176,6 @@ two threads are concurrent.
   \caption{Structure of an OpenMP program with nested parallelism.}
   \label{fig:example01}
 \end{wrapfigure}
-
-\begin{itemize}
-\item Barrier intervals
-\item labeling to identify concurrent threads
-\item sort of lock-set
-\item Implemented by central but fast data structure
-\item OMPT/OMPD
-\end{itemize}
 
 \textbf{\archer v2:} The second version of \archer will embed both static
 analyses and the runtime analysis technique for data race detection of
