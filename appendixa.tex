@@ -1,6 +1,9 @@
 \section{OpenMP Concurrency Operational Semantics}
 \label{sec:appendixa}
 
+This is an excerpt of the operational semantics, the full version can be found
+in~\cite{atzeni_opsem16}. \vspace{-2ex}
+
 \subsection{Convention}
 \label{subsec:convention}
 
@@ -24,8 +27,8 @@ defined by prior forks and joins.
 %
 The domain of $OSL = ((\N\times\N))^{\N}$, i.e. each member $osl\in OSL$ is a
 sequence of pairs
-\[ \langle a_1,b_1\rangle, \langle a_2,b_2\rangle,\ldots,\langle
-a_n,b_n\rangle\] suppose $osl_1, osl_2\in OSL$.
+$\langle a_1,b_1\rangle, \langle a_2,b_2\rangle,\ldots,\langle a_n,b_n\rangle$
+suppose $osl_1, osl_2\in OSL$.
 %
 These labels are sequential exactly when one of the OSLs (say $osl_1$) is a
 prefix of the other.
