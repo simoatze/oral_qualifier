@@ -2,7 +2,7 @@
 \label{sec:introduction}
 
 Multithreaded programming has become very popular with the multi-core
-revolution that spread in the last two decades.
+revolution that has spread in the last two decades.
 %
 This has allowed, in the High Performance Computing (HPC) world, to adopt
 on-node parallelism to a greater degree in large software applications
@@ -68,7 +68,9 @@ overhead can be between $2x-10x$ the memory used by the normal execution of
 the programs.
 %
 For very large programs, such as HPC applications, the runtime and memory
-overhead can be even bigger, experiments show that the slowdown can be $100x$
+overhead can be even bigger.
+%
+For instance, experiments show that the slowdown can be $100x$
 and the memory consumption can be $50x$ larger.
 %
 The high runtime slowdown and memory usage make such tools useless from the
@@ -85,13 +87,14 @@ accuracy using a fairly small amount of runtime and memory resources.
   dynamic analysis while maintaining a low runtime and memory overhead.}
 %
 First, we combine static and existing dynamic techniques to reduce the amount
-of code to analyze at runtime and so lower the overheads.
+of code to analyze at runtime, thus lowering the overheads.
 %
 Second, we will develop a new runtime technique for data race detection that
 exploits the structured parallelism of OpenMP to reduce runtime and memory
 overhead, while guaranteeing high precision and accuracy.
 %
-Our contributions are listed as follow:
+Our project goals are now listed, as conceived at the beginning of our
+research.
 
 \begin{itemize}
 \item \textbf{Sequential Blacklisting:} We will design a static analysis to
@@ -110,6 +113,10 @@ Our contributions are listed as follow:
   technique in a second version of \archer as a replacement of the \tsan
   runtime.
 \end{itemize}
+
+The first three goals have been achieved in our previous
+workshop~\cite{Protze:2014:TPL:2688361.2688369} and
+conference~\cite{atzeni2016} papers.
 
 %%% Local Variables:
 %%% mode: latex
