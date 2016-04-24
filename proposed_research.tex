@@ -158,8 +158,11 @@ formally documented.
 We define a state machine and a set of transition rules that model the
 behavior of an OpenMP program.                            
 %
-The appendix~\ref{sec:appendixa} shows the formal definition of the state
-machine.
+The appendix~\ref{sec:appendixa} shows an excerpt of the formal definition of
+the state machine.
+%
+A full definition of the operational semantics is defined
+in~\cite{atzeni_opsem16}.
 %
 We abstract away from data state as much as possible, using uninterpreted
 functions to occasionally bridge the gap.
@@ -204,6 +207,10 @@ We plan to perform the data race detection check at every barrier checkpoint.
 This will limit the number of race checks performed during the program
 execution, differently from vector-clock techniques that generally perform the
 check at every memory accesses.
+%
+A similar idea is used by GPU race checkers, such as
+GKLEE~\cite{DBLP:conf/sc/LiLG14}, where the race check is performed only
+within a barrier interval.
 %
 The real race-check is illustrated by the ``RaceCheck'' rule in
 appendix~\ref{subsec:sosrules} on the smaller set of memory accesses.
