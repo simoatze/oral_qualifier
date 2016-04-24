@@ -1,90 +1,127 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Multithreaded programming has become very popular with the multi-core
-revolution that has spread in the last two decades.
+Multithreaded programming has become widespread
+in use, given the need to employ multicore
+CPUs to gain higher performance at a given energy budget.
 %
-This has allowed, in the High Performance Computing (HPC) world, to adopt
-on-node parallelism to a greater degree in large software applications
-development especially to guarantee the future required performance and power
-budgets.
+In the High Performance Computing (HPC) world, 
+this has lead to
+an increased adoption of
+on-node parallelism 
+in large software applications.
 %
-In support of this argument, HPC is undergoing an explosion in
-computing capabilities, which is confirmed by the work-in-progress of the
-next-generation of supercomputer projects in the main national research
-facilities of the country~\cite{sierra, summit, trinity}.
-%
-Multithreaded programming is achieved through different programming models
-(e.g. Pthreads), however the predominant paradigm of choice in HPC is
-OpenMP~\cite{ompdoc}, which guarantees portability and ease of use.
-%
-In fact, we are collaborating with computational scientists at Lawrence
-Livermore National Laboratory (LLNL), one of the world's largest computing
-facilities, where the current main task is the porting of critical
-multiphysics application~\cite{llnl-apps} to OpenMP.
+This trend
+is confirmed
+by work that is in progress 
+at national research
+facilities~\cite{sierra, summit, trinity}.
 
-OpenMP is paramount to portable shared memory parallel programming - yet,
+
+Multithreaded programming is achieved through 
+different programming models (e.g. Pthreads); 
+however, the predominant paradigm of choice in HPC is
+OpenMP~\cite{ompdoc}, 
+which guarantees portability and ease of use.
+%
+In fact, we are collaborating with computational 
+scientists at the Lawrence
+Livermore National Laboratory (LLNL), 
+one of the world's largest computing
+facilities, 
+where one of the main ongoing tasks
+is the porting of critical
+multiphysics application~\cite{llnl-apps} to OpenMP.
+%
+In this community,
+OpenMP is of paramount importance to enable
+shared memory parallel programming; yet,
 porting large HPC applications to OpenMP is error-prone.
 %
-The correctness of these applications is crucial to the reliability of the
-simulations pertaining to many real world phenomena of fundamental importance
-such as modeling of nuclear explosions, weather simulations, hydrodynamics
+The correctness of these applications is 
+crucial to the reliability of critical
+simulations pertaining to 
+many real world phenomena of fundamental importance
+such as modeling of nuclear explosions, 
+weather simulations, hydrodynamics
 modeling, etc.
 %
-The most common errors in OpenMP applications are data
+One of the most common of error
+types in OpenMP applications is data
 races~\cite{sus_common_2008}.
 %
-Data races are often hard to find with traditional debugging methods.
+Data races are often hard to locate
+with traditional debugging methods.
 %
-Precise checking tools to detect these kinds of errors are needed now more
-than ever.
+Precise checking tools to detect data races
+are needed now more than ever.
 %
-While data race is a well-known problem and many Pthreads data race detection
-tools have been proposed over the past twenty years, none or just a few of
+While data race is a 
+well-known problem and many Pthreads data race detection
+tools have been proposed over the past twenty years, 
+none or just a few of
 them are actually able to analyze OpenMP programs.
+%
+Our work targets this critical need.
 
-Data race detection research has focused both on static and dynamic analysis
+Data race detection research has focused both on 
+static and dynamic analysis
 techniques.
 %
-Static analysis techniques allow to reason about all the inputs of the program
-and the interleavings of the threads, and they are fairly scalable and fast
-since no runtime overhead is generated.
+Static analysis techniques allow to 
+reason about all the inputs of the program
+and the interleavings of the threads, 
+and they are fairly scalable and fast
+since no runtime overhead is incurred.
 %
-However, the lack of information that exists only at runtime makes these
-techniques very imprecise, in fact they often miss races and report many false
+However, the lack of information that exists 
+only at runtime makes these
+techniques very imprecise;
+in fact they often miss races and generate many false
 positives.
 %
-While runtime techniques are very precise, they do not report any false
-positives and reports the races in the branches of the programs that are
-actually executed if any.
+Runtime techniques are  precise, as
+they do not report any false
+positives, and only report races in 
+the branches of programs that are
+actually executed.
 %
 On the other hand dynamic analysis for data race detection is known to
 generate a very high runtime and memory overhead due to the operations it
 needs to perform and the states it needs to maintain during the execution.
 
-The runtime overhead for the best tools, such as ThreadSanitizer (Tsan) and
-Intel Inspector XE, can introduce between $5x-20x$ slowdown and the memory
-overhead can be between $2x-10x$ the memory used by the normal execution of
+The runtime overhead of even the best of dynamic
+tools, such as the ThreadSanitizer (Tsan) and
+Intel Inspector XE, can cause between $5x-20x$ slowdown and the memory
+overhead can be between $2x-10x$ of the memory used by the normal execution of
 the programs.
 %
 For very large programs, such as HPC applications, the runtime and memory
-overhead can be even bigger.
+overheads can be even bigger.
 %
-For instance, experiments show that the slowdown can be $100x$
+For instance, our experiments show that this slowdown can be $100x$
 and the memory consumption can be $50x$ larger.
 %
 The high runtime slowdown and memory usage make such tools useless from the
-point of view of the developers, whom probably would not be keen to wait a
-long time to check their programs or they may not even have enough machine
+point of view of actual developers, who probably would not be keen on waiting a
+long time to check their programs; or they may not even have enough machine
 resources to run the tools.
 %
-We definitely need better techniques, either static or dynamic, to detect data
-races in large structured parallel applications, that guarantee precision and
-accuracy using a fairly small amount of runtime and memory resources.
+We definitely need better techniques --  static, dynamic, or combinations -- 
+to detect data
+races in large structured parallel applications, while guaranteeing precision and
+accuracy while incurring modest overheads.
 
 \emph{The goal of this dissertation is to provide a sound and precise data
   race detection tool for large OpenMP applications that combine static and
-  dynamic analysis while maintaining a low runtime and memory overhead.}
+  dynamic analysis while maintaining a low runtime and memory overhead.
+  Our thesis statement is that by combining the best of these techniques 
+  and tailoring the implementation to the actual concurrency structure of
+  structured parallel languages such as OpenMP, we can make data race checking
+ of HPC applications practical.}
+
+
+Our approach is now briefly summarized.
 %
 First, we combine static and existing dynamic techniques to reduce the amount
 of code to analyze at runtime, thus lowering the overheads.
@@ -108,7 +145,7 @@ research.
   of a data race detector called \archer.
 \item \textbf{Clock-less runtime algorithm:} We will design and implement a
   new runtime analysis technique that exploit the structured parallelism of
-  the OpenMP paradigm in order to reduce the runtime and memory overhead.
+  the OpenMP paradigm in order to reduce the runtime and memory overheads.
 \item \textbf{\archer v2:} We will embed the aforementioned new runtime
   technique in a second version of \archer as a replacement of the \tsan
   runtime.
