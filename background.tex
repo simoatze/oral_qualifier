@@ -1,11 +1,11 @@
 \section{Background}
 \label{sec:background}
 
-Data race detection is probably one of the most widely studied problems in
-concurrent programs design and has been shown to be
+Data race detection is probably one of the most widely studied of problems in
+concurrent programs design and debugging, and has been shown to be
 NP-hard~\cite{netzer-miller}.
 %
-Data races are in general the symptoms for a large number of root-causes: lack
+Data races are in general a symptom for a large number of root-causes: lack
 of atomicity~\cite{usenix-race-erickson-et-al}, unintended
 sharing~\cite{race-rv-2012-talk}, or a misunderstanding of how generated code
 behaves (e.g. miscompilation~\cite{Boehm:2011:MPB:2001252.2001255}).
@@ -20,7 +20,7 @@ positives~\cite{Pratikakis:2011:LPS:1889997.1890000} and miss
 races~\cite{Voung:2007:RSR:1287624.1287654}.
 %
 Dynamic race detection techniques analyze a specific trace of a program
-that is actually executed
+that is actually executed.
 %
 Dynamic race detectors process the program’s events in parallel during the
 execution~\cite{Lamport:1978:TCO:359545.359563, Savage:1997:EDD:269005.266641,
@@ -57,7 +57,7 @@ not very precise and accurate (indeed they often miss races and report many
 false alarms).
 %
 Furthermore they generate a very high runtime and memory overhead that make
-their usage often unfeasible especially with large scientific HPC
+their usage often infeasible especially with large scientific HPC
 applications.
 
 %%% Local Variables:
