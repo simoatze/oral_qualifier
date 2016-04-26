@@ -1,100 +1,69 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Multithreaded programming has become widespread
-in use, given the need to employ multicore
-CPUs to gain higher performance at a given energy budget.
+Multithreaded programming has become widespread in use, given the need to
+employ multicore CPUs to gain higher performance at a given energy budget.
 %
-In the High Performance Computing (HPC) world, 
-this has lead to
-an increased adoption of
-on-node parallelism 
-in large software applications.
+In the High Performance Computing (HPC) world, this has lead to an increased
+adoption of on-node parallelism in large software applications.
 %
-This trend
-is confirmed
-by work that is in progress 
-at national research
+This trend is confirmed by work that is in progress at national research
 facilities~\cite{sierra, summit, trinity}.
 
 
-Multithreaded programming is achieved through 
-different programming models (e.g. Pthreads); 
-however, the predominant paradigm of choice in HPC is
-OpenMP~\cite{ompdoc}, 
-which guarantees portability and ease of use.
+Multithreaded programming is achieved through different programming models
+(e.g. Pthreads); however, the predominant paradigm of choice in HPC is
+OpenMP~\cite{ompdoc}, which guarantees portability and ease of use.
 %
-In fact, we are collaborating with computational 
-scientists at the Lawrence
-Livermore National Laboratory (LLNL), 
-one of the world's largest computing
-facilities, 
-where one of the main ongoing tasks
-is the porting of critical
+In fact, we are collaborating with computational scientists at the Lawrence
+Livermore National Laboratory (LLNL), one of the world's largest computing
+facilities, where one of the main ongoing tasks is the porting of critical
 multiphysics application~\cite{llnl-apps} to OpenMP.
 %
-In this community,
-OpenMP is of paramount importance to enable
-shared memory parallel programming; yet,
-porting large HPC applications to OpenMP is error-prone.
+In this community, OpenMP is of paramount importance to enable shared memory
+parallel programming; yet, porting large HPC applications to OpenMP is
+error-prone.
 %
-The correctness of these applications is 
-crucial to the reliability of critical
-simulations pertaining to 
-many real world phenomena of fundamental importance
-such as modeling of nuclear explosions, 
-weather simulations, hydrodynamics
-modeling, etc.
+The correctness of these applications is crucial to the reliability of
+critical simulations pertaining to many real world phenomena of fundamental
+importance such as modeling of nuclear explosions, weather simulations,
+hydrodynamics modeling, etc.
 %
-One of the most common of error
-types in OpenMP applications is data
+One of the most common of error types in OpenMP applications is data
 races~\cite{sus_common_2008}.
 %
-Data races are often hard to locate
-with traditional debugging methods.
+Data races are often hard to locate with traditional debugging methods.
 %
-Precise checking tools to detect data races
-are needed now more than ever.
+Precise checking tools to detect data races are needed now more than ever.
 %
-While data race is a 
-well-known problem and many Pthreads data race detection
-tools have been proposed over the past twenty years, 
-none or just a few of
+While data race is a well-known problem and many Pthreads data race detection
+tools have been proposed over the past twenty years, none or just a few of
 them are actually able to analyze OpenMP programs.
 %
 Our work targets this critical need.
 
-Data race detection research has focused both on 
-static and dynamic analysis
+Data race detection research has focused both on static and dynamic analysis
 techniques.
 %
-Static analysis techniques allow to 
-reason about all the inputs of the program
-and the interleavings of the threads, 
-and they are fairly scalable and fast
+Static analysis techniques allow to reason about all the inputs of the program
+and the interleavings of the threads, and they are fairly scalable and fast
 since no runtime overhead is incurred.
 %
-However, the lack of information that exists 
-only at runtime makes these
-techniques very imprecise;
-in fact they often miss races and generate many false
-positives.
+However, the lack of information that exists only at runtime makes these
+techniques very imprecise; in fact they often miss races and generate many
+false positives.
 %
-Runtime techniques are  precise, as
-they do not report any false
-positives, and only report races in 
-the branches of programs that are
-actually executed.
+Runtime techniques are precise, as they do not report any false positives, and
+only report races in the branches of programs that are actually executed.
 %
 On the other hand dynamic analysis for data race detection is known to
 generate a very high runtime and memory overhead due to the operations it
 needs to perform and the states it needs to maintain during the execution.
 
-The runtime overhead of even the best of dynamic
-tools, such as the ThreadSanitizer (Tsan) and
-Intel Inspector XE, can cause between $5x-20x$ slowdown and the memory
-overhead can be between $2x-10x$ of the memory used by the normal execution of
-the programs.
+The runtime overhead of even the best of dynamic tools, such as the
+ThreadSanitizer (Tsan) and Intel Inspector XE, can cause between $5x-20x$
+slowdown and the memory overhead can be between $2x-10x$ of the memory used by
+the normal execution of the programs.
 %
 For very large programs, such as HPC applications, the runtime and memory
 overheads can be even bigger.
@@ -103,23 +72,25 @@ For instance, our experiments show that this slowdown can be $100x$
 and the memory consumption can be $50x$ larger.
 %
 The high runtime slowdown and memory usage make such tools useless from the
-point of view of actual developers, who probably would not be keen on waiting a
-long time to check their programs; or they may not even have enough machine
+point of view of actual developers, who probably would not be keen on waiting
+a long time to check their programs; or they may not even have enough machine
 resources to run the tools.
 %
-We definitely need better techniques --  static, dynamic, or combinations -- 
-to detect data
-races in large structured parallel applications, while guaranteeing precision and
-accuracy while incurring modest overheads.
+We definitely need better techniques -- static, dynamic, or combinations -- to
+detect data races in large structured parallel applications, while
+guaranteeing precision and accuracy while incurring modest overheads.
 
-\emph{The goal of this dissertation is to provide a sound and precise data
-  race detection tool for large OpenMP applications that combine static and
-  dynamic analysis while maintaining a low runtime and memory overhead.
-  Our thesis statement is that by combining the best of these techniques 
+\subsection{Thesis statement}
+\label{subsec:statement}
+
+The goal of this dissertation is to provide a sound and precise data race
+detection tool for large OpenMP applications that combine static and dynamic
+analysis while maintaining a low runtime and memory overhead.
+% 
+\emph{Our thesis statement is that by combining the best of these techniques
   and tailoring the implementation to the actual concurrency structure of
   structured parallel languages such as OpenMP, we can make data race checking
- of HPC applications practical.}
-
+  of HPC applications practical.}
 
 Our approach is now briefly summarized.
 %
