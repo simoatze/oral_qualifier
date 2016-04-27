@@ -118,9 +118,9 @@ consider the example show in figure~\ref{fig:example01}.
 The example shows a main thread~\footnote{A thread is represented as a
   circle.} that spawns a parallel region of two threads.
 %
-After that, each thread will be creates its own nested parallel regions, which
-after their execution-life will join to a single thread, and so on for each
-region, until they join again to the main thread.
+After that, each thread create its own nested parallel regions, which after
+their execution-life will join to a single thread, and so on for each region,
+until they join again to the main thread.
 %
 Differently from the Pthreads programming models, in OpenMP the main thread
 (or in general the forking thread) will be always part of the parallel region
