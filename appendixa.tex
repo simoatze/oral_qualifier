@@ -25,7 +25,7 @@ An offset-span label ($osl$ for short) labels each thread's execution point
 with a sequence of pairs, marking its lineage in the concurrency structure
 defined by prior forks and joins.
 %
-The domain of $OSL = ((\N\times\N))^{\N}$, i.e. each member $osl\in OSL$ is a
+The domain of $OSL = ((\N\times\N))^{\N}$, i.e.\ each member $osl\in OSL$ is a
 sequence of pairs
 $\langle a_1,b_1\rangle, \langle a_2,b_2\rangle,\ldots,\langle a_n,b_n\rangle$
 suppose $osl_1, osl_2\in OSL$.
@@ -71,7 +71,7 @@ $TS = GS\times TP$.
   \footnotetext{Recall that functions are single-valued relations, or sets of
     pairs with unique second component for each given first component.  Thus,
     $\{\langle osl,(0,N)\rangle\}$ is a function. We will allow functions to
-    evolve, i.e. undefined for items explicitly added.}
+    evolve, i.e.\ undefined for items explicitly added.}
   %
   The first field $0$ will be incremented each time we close a barrier or a
   parallel region, in a manner to be described momentarily.
@@ -145,7 +145,7 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
 \item $as$: is used as in Ocaml (it allows a name for a whole structure, as
   well as helps us refer to the inner details of the structure).
 \item $most(lst)$: we define $most$ as a function that return the same list
-  given in input except the last element (i.e. in Python lst[:-1]).
+  given in input except the last element (i.e.\ in Python lst[:-1]).
 \item $\parallel$: This operator is used to describe that two different
   threads are concurrent.
   %
@@ -208,7 +208,7 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
 \begin{framed}
   \vspace{-3ex}
   \begin{flushleft}
-    \resizebox{0.95\textwidth}{!}{
+    \resizebox{0.95\textwidth}{!}{\
       \begin{minipage}[b]{0.5\textwidth}
         \[
         \inference[ParBegin(N)]{
@@ -244,7 +244,7 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
   \end{flushleft}
 
   \begin{flushleft}
-    \resizebox{0.95\textwidth}{!}{
+    \resizebox{0.95\textwidth}{!}{\
       \begin{minipage}[b]{0.5\textwidth}
         \[
         \inference[ParEnd(N)]{
@@ -274,7 +274,7 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
   \end{flushleft}
 
   \begin{flushleft}
-    \resizebox{0.95\textwidth}{!}{
+    \resizebox{0.95\textwidth}{!}{\
       \begin{minipage}[b]{0.5\textwidth}
         \[
         \inference[AcquireMutex]{
@@ -303,7 +303,7 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
   \end{flushleft}
 
   \begin{flushleft}
-    \resizebox{0.95\textwidth}{!}{
+    \resizebox{0.95\textwidth}{!}{\
       \begin{minipage}[b]{0.5\textwidth}
         \[
         \inference[AcquireNutex(name)]{
@@ -317,7 +317,7 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
         \]
       \end{minipage}
       \hspace{90pt}
-      \begin{minipage}[b]{0.5\textwidth}            
+      \begin{minipage}[b]{0.5\textwidth}
         \[
         \inference[ReleaseNutex(name)]{
           gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
@@ -332,7 +332,7 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
   \end{flushleft}
 
   \begin{flushleft}
-    \resizebox{0.95\textwidth}{!}{
+    \resizebox{0.95\textwidth}{!}{\
       \begin{minipage}[b]{0.5\textwidth}
         \[
         \inference[Barrier(bid)]{
@@ -348,7 +348,7 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
         \]
       \end{minipage}
       \hspace{90pt}
-      \begin{minipage}[b]{0.5\textwidth}    
+      \begin{minipage}[b]{0.5\textwidth}
         \[
         \inference[Barrier(bid)]{
           gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
@@ -368,7 +368,7 @@ The domain $TP=2^{TID\times OSL\times \N}$ where:
   \begin{flushleft}
     \begin{minipage}[b]{1\textwidth}
       \centering
-      \resizebox{0.55\textwidth}{!}{
+      \resizebox{0.55\textwidth}{!}{\
         $\inference[RaceCheck]{
           gs\; as\; (bm, m, n, rw, \sigma) \in GS \\
           te_1\; as\; (tid_1, osl1, bl1) \in tp\\

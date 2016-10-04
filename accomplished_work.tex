@@ -38,7 +38,7 @@ the annotated OpenMP runtime provided by \archer.
 The annotations communicate with the \tsan runtime in order to establish an
 implicit happens-before relations, between the involved threads, in those
 cases where the OpenMP runtime adopts synchronization primitive unknown by
-\tsan (e.g. omp barrier, etc.).
+\tsan (e.g.\ omp barrier, etc.).
 %
 This solution builds the knowledge of the happens-before relation into the
 runtime libraries to obtain precision and accuracy in the data race detection
