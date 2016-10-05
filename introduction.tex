@@ -10,7 +10,6 @@ adoption of on-node parallelism in large software applications.
 This trend is confirmed by work that is in progress at national research
 facilities~\cite{sierra, summit, trinity}.
 
-
 Multithreaded programming is achieved through different programming models
 (e.g. Pthreads); however, the predominant paradigm of choice in HPC is
 OpenMP~\cite{ompdoc}, which guarantees portability and ease of use.
@@ -34,7 +33,8 @@ races~\cite{sus_common_2008}.
 %
 Data races are often hard to locate with traditional debugging methods.
 %
-Precise checking tools to detect data races are needed now more than ever.
+Fast and precise checking tools to detect data races are needed now more than
+ever.
 %
 While data race is a well-known problem and many Pthreads data race detection
 tools have been proposed over the past twenty years, none or just a few of
@@ -77,16 +77,15 @@ a long time to check their programs; or they may not even have enough machine
 resources to run the tools.
 %
 We definitely need better techniques -- static, dynamic, or combinations -- to
-detect data races in large structured parallel applications, while
-guaranteeing precision and accuracy while incurring modest overheads.
+detect data races in large structured parallel applications.
 
 \subsection{Thesis statement}
 \label{subsec:statement}
 
-The goal of this dissertation is to provide a sound and precise data race
+The goal of this dissertation is to provide an approximate but fast data race
 detection tool for large OpenMP applications that combine static and dynamic
-analysis while maintaining a low runtime and memory overhead.
-% 
+analysis.
+%
 \emph{Our thesis statement is that by combining the best of these techniques
   and tailoring the implementation to the actual concurrency structure of
   structured parallel languages such as OpenMP, we can make data race checking
@@ -94,12 +93,28 @@ analysis while maintaining a low runtime and memory overhead.
 
 Our approach is now briefly summarized.
 %
-First, we combine static and existing dynamic techniques to reduce the amount
+First, we combined static and existing dynamic techniques to reduce the amount
 of code to analyze at runtime, thus lowering the overheads.
 %
-Second, we will develop a new runtime technique for data race detection that
-exploits the structured parallelism of OpenMP to reduce runtime and memory
-overhead, while guaranteeing high precision and accuracy.
+As we will show in \S~\pageref{sec:accomplishedwork}, the first approach allow
+in general a speed up of about 25\%, which is still not enough for large HPC
+applications.
+%
+Therefore as second approach, we will develop a new runtime technique for data
+race detection that exploits the structured parallelism of OpenMP to reduce
+runtime and memory overhead.
+%
+In order to guarantee a fast data race detection, we give up some precision
+and accuracy which only produce more false positives but still guarantee the
+absence of false negatives.
+%
+Furthermore, we provide to the user a mechanism to further check part of all
+the reported races with a more precise data race detection techniques (e.g
+Tsan).
+%
+This approach will allow to speedup the more precise race detection
+techniques since the runtime check will only focus on a smaller amount of
+memory accesses.
 %
 Our project goals are now listed, as conceived at the beginning of our
 research.
