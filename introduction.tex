@@ -133,8 +133,9 @@ research.
   new runtime analysis technique that exploits the structured parallelism of
   the OpenMP paradigm in order to reduce the runtime and memory overheads.
 \item \textbf{\archer v2:} We will embed the aforementioned new runtime
-  technique in a second version of \archer as a replacement of the \tsan
-  runtime.
+  technique in a second version of \archer as an approximate pre-pass data
+  race detection to reduce the resources required by more precise techniques
+  such as the \tsan runtime.
 \end{itemize}
 
 The first three goals have been achieved in our previous
